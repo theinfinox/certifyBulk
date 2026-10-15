@@ -1,6 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  themeColor: "#0d0d0d",
+};
 
 export const metadata: Metadata = {
   title: "CertifyBulk | High-Res Bulk Certificate Generator",
@@ -21,10 +25,13 @@ export const metadata: Metadata = {
     creator: "@theinfinox"
   },
   icons: {
-    icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%2300C853%22 rx=%2220%22 stroke=%22%230d0d0d%22 stroke-width=%228%22/><text y=%2250%22 x=%2250%22 fill=%22%230d0d0d%22 font-family=%22monospace%22 font-weight=%22900%22 font-size=%2255%22 text-anchor=%22middle%22 dominant-baseline=%22central%22>CB</text></svg>",
+    icon: [
+      { url: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/icons/icon-192x192.png",
   },
   manifest: "/manifest.json",
-  themeColor: "#0d0d0d",
 };
 
 export default function RootLayout({

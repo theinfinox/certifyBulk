@@ -1,16 +1,89 @@
 {
-  "name": "CertifyBulk",
+  "id": "https://certify.govindsr.me/",
+  "name": "CertifyBulk - High-Resolution Bulk Certificate Generator",
   "short_name": "CertifyBulk",
-  "description": "High-resolution bulk certificate generation",
+  "description": "Lightning-fast, entirely client-side PWA for generating mass high-resolution certificates locally using dynamic CSV data mappings.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#f8f9fa",
   "theme_color": "#0d0d0d",
+  "dir": "ltr",
+  "lang": "en-US",
+  "categories": [
+    "productivity",
+    "utilities",
+    "graphics"
+  ],
+  "prefer_related_applications": false,
   "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/Square44x44Logo.png",
+      "sizes": "44x44",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/Square150x150Logo.png",
+      "sizes": "150x150",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/Wide310x150Logo.png",
+      "sizes": "310x150",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/Square310x310Logo.png",
+      "sizes": "310x310",
+      "type": "image/png"
+    },
     {
       "src": "/favicon.ico",
       "sizes": "256x256",
       "type": "image/x-icon"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-editor.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "CertifyBulk Canvas Editor and CSV Data Mapping Interface"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Documentation & Guides",
+      "short_name": "Guides",
+      "description": "Step-by-step instructions on how to use CertifyBulk",
+      "url": "/guides",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }
