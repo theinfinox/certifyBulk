@@ -6,17 +6,60 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
   "orientation": "any",
   "background_color": "#f8f9fa",
   "theme_color": "#0d0d0d",
   "dir": "ltr",
   "lang": "en-US",
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ec4e53b7",
   "categories": [
     "productivity",
     "utilities",
     "graphics"
   ],
   "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "windows",
+      "id": "theinfinox.CertifyBulk",
+      "url": "https://apps.microsoft.com/detail/theinfinox.CertifyBulk"
+    }
+  ],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "scope_extensions": [
+    {
+      "origin": "https://certify.govindsr.me"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "/",
+      "name": "CSV Spreadsheet",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ],
+      "accept": {
+        "text/csv": [".csv"]
+      }
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+certify",
+      "url": "/?cert=%s"
+    }
+  ],
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
@@ -42,6 +85,11 @@
       "type": "image/png"
     },
     {
+      "src": "/icons/StoreLogo.png",
+      "sizes": "50x50",
+      "type": "image/png"
+    },
+    {
       "src": "/icons/Square150x150Logo.png",
       "sizes": "150x150",
       "type": "image/png"
@@ -55,11 +103,6 @@
       "src": "/icons/Square310x310Logo.png",
       "sizes": "310x310",
       "type": "image/png"
-    },
-    {
-      "src": "/favicon.ico",
-      "sizes": "256x256",
-      "type": "image/x-icon"
     }
   ],
   "screenshots": [
@@ -69,6 +112,13 @@
       "type": "image/png",
       "form_factor": "wide",
       "label": "CertifyBulk Canvas Editor and CSV Data Mapping Interface"
+    },
+    {
+      "src": "/screenshots/mobile-view.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "CertifyBulk Mobile Canvas View"
     }
   ],
   "shortcuts": [
