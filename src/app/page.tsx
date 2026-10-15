@@ -124,7 +124,7 @@ export default function Home() {
            <p className="font-mono text-[10px] md:text-sm uppercase mt-1 md:mt-2">Make certificates in bulk with ease</p>
         </div>
         <div className="flex flex-wrap justify-center md:justify-end gap-2 md:gap-4 w-full md:w-auto">
-           <a href="https://github.com/theinfinox/cerify" target="_blank" rel="noopener noreferrer" aria-label="Github Repository">
+           <a href="https://github.com/theinfinox/certifyBulk" target="_blank" rel="noopener noreferrer" aria-label="Github Repository">
              <button className="neo-button bg-transparent text-white border-white shadow-[4px_4px_0px_#ffffff] md:shadow-[6px_6px_0px_#ffffff] hover:shadow-[8px_8px_0px_#ffffff] text-xs md:text-base px-3 py-2 md:px-3 flex items-center justify-center">
                 <Github size={18} />
              </button>

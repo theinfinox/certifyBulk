@@ -112,7 +112,7 @@ export default function PrivacyPage() {
                </p>
                <div className="mt-4 flex flex-wrap gap-4 font-mono text-sm font-bold">
                   <a 
-                     href="https://github.com/theinfinox/cerify" 
+                     href="https://github.com/theinfinox/certifyBulk" 
                      target="_blank" 
                      rel="noopener noreferrer"
                      className="bg-primary-black text-white px-4 py-2 border-2 border-primary-black shadow-[3px_3px_0_#00C853] hover:-translate-y-0.5 transition-all"
