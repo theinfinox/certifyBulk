@@ -17,6 +17,7 @@ export interface Field {
   autoShrink: boolean;
   autoCenterHorizontal: boolean;
   autoCenterVertical: boolean;
+  staticText?: string;
 }
 
 interface AppState {

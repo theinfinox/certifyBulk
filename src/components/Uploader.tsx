@@ -19,12 +19,17 @@ export const Uploader: React.FC = () => {
       return;
     }
 
+    if (templateImage && templateImage.startsWith('blob:')) {
+      URL.revokeObjectURL(templateImage);
+    }
+
     const url = URL.createObjectURL(file);
     const img = new Image();
     img.onload = () => {
       setTemplateImage(url, img.width, img.height);
     };
     img.src = url;
+    e.target.value = '';
   };
 
   const handleCsvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,15 +39,25 @@ export const Uploader: React.FC = () => {
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
+      transformHeader: (header) => header.replace(/^\uFEFF/, '').trim(),
       complete: (results) => {
         if (results.meta.fields) {
-          setCsvData(results.data as Record<string, string>[], results.meta.fields);
+          const cleanHeaders = results.meta.fields.map(h => h.replace(/^\uFEFF/, '').trim());
+          setCsvData(results.data as Record<string, string>[], cleanHeaders);
         }
       },
       error: () => {
         alert("Failed to parse CSV. Please ensure it is a valid format.");
       }
     });
+    e.target.value = '';
+  };
+
+  const handleClearAll = () => {
+    if (templateImage && templateImage.startsWith('blob:')) {
+      URL.revokeObjectURL(templateImage);
+    }
+    resetAll();
   };
 
   return (
@@ -86,7 +101,7 @@ export const Uploader: React.FC = () => {
 
         <button 
           className="neo-button neo-button-danger flex justify-center items-center gap-2 mt-4"
-          onClick={resetAll}
+          onClick={handleClearAll}
         >
           <Trash2 size={20} />
           CLEAR ALL

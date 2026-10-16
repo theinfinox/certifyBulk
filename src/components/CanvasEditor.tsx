@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer, Image as KonvaImage, Text, Transformer, Line, Rect } from "react-konva";
+import Konva from "konva";
 import useImage from "use-image";
 import { useCertifyStore, Field } from "../store/useCertifyStore";
 
@@ -14,23 +15,24 @@ interface FieldNodeProps {
 }
 
 const FieldNode: React.FC<FieldNodeProps> = ({ field, isSelected, scale, onSelect, onChange }) => {
-  const textRef = useRef<any>(null);
-  const trRef = useRef<any>(null);
-  const [fontLoaded, setFontLoaded] = useState(false);
+  const textRef = useRef<Konva.Text | null>(null);
+  const trRef = useRef<Konva.Transformer | null>(null);
   const { templateDimensions } = useCertifyStore();
 
   useEffect(() => {
     if (isSelected && trRef.current && textRef.current) {
       trRef.current.nodes([textRef.current]);
-      trRef.current.getLayer().batchDraw();
+      trRef.current.getLayer()?.batchDraw();
     }
   }, [isSelected]);
 
   useEffect(() => {
     if (field.fontFamily) {
-      document.fonts.load(`16px "${field.fontFamily}"`).then(() => {
-        setFontLoaded(true);
+      const sanitized = field.fontFamily.replace(/["']/g, '');
+      document.fonts.load(`16px "${sanitized}"`).then(() => {
         textRef.current?.getLayer()?.batchDraw();
+      }).catch((err) => {
+        console.warn("CanvasEditor font load error:", err);
       });
     }
   }, [field.fontFamily]);
@@ -38,17 +40,18 @@ const FieldNode: React.FC<FieldNodeProps> = ({ field, isSelected, scale, onSelec
   const effectiveX = (field.autoCenterHorizontal && templateDimensions) ? (templateDimensions.width / 2 - field.width / 2) : field.x;
   const effectiveY = (field.autoCenterVertical && templateDimensions) ? (templateDimensions.height / 2 - field.height / 2) : field.y;
 
-  let konvaAlign = field.align;
-  let konvaVerticalAlign = field.verticalAlign;
+  const konvaAlign = field.align;
+  const konvaVerticalAlign = field.verticalAlign;
 
   const fontStyle = `${field.isItalic ? 'italic ' : ''}${field.isBold ? 'bold' : 'normal'}`;
   const fontFamily = field.fontFamily || '"Courier New", Courier, monospace';
+  const displayText = field.mappedColumn ? `[${field.mappedColumn}]` : (field.staticText || 'Certificate');
 
   return (
     <>
       <Text
         ref={textRef}
-        text={`[${field.mappedColumn || field.id}]`}
+        text={displayText}
         x={effectiveX}
         y={effectiveY}
         width={field.width}
@@ -62,7 +65,7 @@ const FieldNode: React.FC<FieldNodeProps> = ({ field, isSelected, scale, onSelec
            return {
              x: field.autoCenterHorizontal ? effectiveX * scale : pos.x,
              y: field.autoCenterVertical ? effectiveY * scale : pos.y
-           }
+           };
         }}
         onClick={onSelect}
         onTap={onSelect}
@@ -72,8 +75,9 @@ const FieldNode: React.FC<FieldNodeProps> = ({ field, isSelected, scale, onSelec
             y: field.autoCenterVertical ? effectiveY : e.target.y(),
           });
         }}
-        onTransformEnd={(e) => {
+        onTransformEnd={() => {
           const node = textRef.current;
+          if (!node) return;
           const scaleX = node.scaleX();
           const scaleY = node.scaleY();
 
@@ -172,8 +176,10 @@ export const CanvasEditor: React.FC = () => {
     return () => window.removeEventListener("resize", checkSize);
   }, [image]);
 
-  const checkDeselect = (e: any) => {
-    const clickedOnEmpty = e.target === e.target.getStage() || e.target.hasName('bg-image');
+  const checkDeselect = (e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) => {
+    const stage = e.target.getStage();
+    const isBgImage = 'name' in e.target && typeof (e.target as Konva.Node).name === 'function' && (e.target as Konva.Node).name() === 'bg-image';
+    const clickedOnEmpty = e.target === stage || isBgImage;
     if (clickedOnEmpty) {
       setSelectedField(null);
     }

@@ -12,7 +12,6 @@ import { useCertifyStore } from "../store/useCertifyStore";
 import { DownloadCloud, Eye, Heart, Github } from "lucide-react";
 
 import Link from 'next/link';
-import { SplashScreen } from "../components/SplashScreen";
 
 // Dynamically import CanvasEditor to prevent SSR issues with react-konva / canvas
 const CanvasEditor = dynamic(
@@ -21,7 +20,7 @@ const CanvasEditor = dynamic(
 );
 
 export default function Home() {
-  const { csvData, fields, templateImage, templateDimensions } = useCertifyStore();
+  const { csvData, fields, templateImage, templateDimensions, selectedFieldId } = useCertifyStore();
   const [safetyModalOpen, setSafetyModalOpen] = useState(false);
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
   const [previewBlobs, setPreviewBlobs] = useState<Blob[]>([]);
@@ -115,8 +114,6 @@ export default function Home() {
   };
 
   return (
-    <>
-    <SplashScreen />
     <main className="min-h-screen xl:h-screen xl:overflow-hidden p-4 md:p-6 flex flex-col gap-4 xl:gap-6 max-w-[2400px] mx-auto">
       <header className="flex-shrink-0 flex flex-col md:flex-row justify-between items-center gap-4 bg-primary-black text-white p-4 md:p-6 neo-card rounded-none">
         <div className="text-center md:text-left">
@@ -162,6 +159,7 @@ export default function Home() {
          </div>
       </div>
 
+      <Toolbar selectedFieldId={selectedFieldId} onOpenSafetyModal={() => setSafetyModalOpen(true)} />
       <WarningModal isOpen={safetyModalOpen} onClose={() => setSafetyModalOpen(false)} />
       
       <PreviewModal 
@@ -185,6 +183,5 @@ export default function Home() {
          <Link href="/privacy" className="hover:text-primary-green underline transition-colors">PRIVACY POLICY</Link>
        </footer>
     </main>
-    </>
   );
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { useCertifyStore } from "../store/useCertifyStore";
-import { PlusCircle, Trash2, Grid, AlignCenterHorizontal, AlignCenterVertical, AlignLeft, AlignCenter, AlignRight, AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd } from "lucide-react";
+import { PlusCircle, Trash2, Grid, AlignCenterHorizontal, AlignLeft, AlignCenter, AlignRight, AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd } from "lucide-react";
 import { FontPicker } from "./FontPicker";
 
 export const DataMapper: React.FC = () => {
@@ -28,7 +28,8 @@ export const DataMapper: React.FC = () => {
       isBold: true,
       isItalic: false,
       color: '#0d0d0d',
-      mappedColumn: csvHeaders[0] || 'Text',
+      mappedColumn: csvHeaders[0] || '',
+      staticText: 'Certificate',
       autoShrink: false,
       autoCenterHorizontal: false,
       autoCenterVertical: false,
@@ -51,7 +52,7 @@ export const DataMapper: React.FC = () => {
             <select 
               className="neo-input w-2/3 text-sm font-mono"
               value={gridLevel}
-              onChange={(e) => setGridLevel(e.target.value as any)}
+              onChange={(e) => setGridLevel(e.target.value as 'off' | 'low' | 'medium' | 'high')}
             >
               <option value="off">OFF / NONE</option>
               <option value="low">LOW (Golden Ratio)</option>
@@ -61,7 +62,7 @@ export const DataMapper: React.FC = () => {
             <select 
               className="neo-input w-1/3 text-xs font-mono"
               value={useCertifyStore.getState().gridColor}
-              onChange={(e) => useCertifyStore.getState().setGridColor(e.target.value as any)}
+              onChange={(e) => useCertifyStore.getState().setGridColor(e.target.value as 'dark' | 'light')}
             >
               <option value="dark">Dark</option>
               <option value="light">Light</option>
@@ -93,6 +94,19 @@ export const DataMapper: React.FC = () => {
                   {csvHeaders.length === 0 && <option disabled>No CSV Uploaded</option>}
                 </select>
               </div>
+
+              {!field.mappedColumn && (
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] font-mono font-bold">STATIC TEXT VALUE</label>
+                  <input 
+                    type="text" 
+                    className="neo-input w-full text-sm"
+                    placeholder="Enter static text (e.g. Certificate)"
+                    value={field.staticText ?? 'Certificate'}
+                    onChange={(e) => updateField(field.id, { staticText: e.target.value })}
+                  />
+                </div>
+              )}
 
               <div className="flex gap-2 relative">
                 <div className="flex flex-col gap-1 w-2/3">

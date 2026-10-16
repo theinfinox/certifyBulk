@@ -12,16 +12,17 @@ interface GeneratePayload {
 
 self.onmessage = async (e: MessageEvent<GeneratePayload>) => {
   const { imageBlob, fields, data, templateDimensions, stageDimensions, isPreview } = e.data;
+  let bitmap: ImageBitmap | null = null;
   
   try {
-    const bitmap = await self.createImageBitmap(imageBlob);
+    bitmap = await self.createImageBitmap(imageBlob);
     
     // --- Load fonts dynamically for the OffscreenCanvas worker scope ---
     const uniqueFonts = Array.from(new Set(fields.map(f => f.fontFamily).filter(Boolean)));
     for (const font of uniqueFonts) {
       if (!font) continue;
       try {
-        const url = `https://fonts.googleapis.com/css2?family=${font.replace(/ /g, '+')}&display=swap`;
+        const url = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font.replace(/ /g, '+'))}&display=swap`;
         const cssRes = await fetch(url);
         const cssText = await cssRes.text();
         
@@ -32,10 +33,10 @@ self.onmessage = async (e: MessageEvent<GeneratePayload>) => {
            const cleanUrl = fontUrlMatch.replace(/['"]/g, '');
            const fontFace = new FontFace(font, `url(${cleanUrl})`);
            await fontFace.load();
-           (self as any).fonts.add(fontFace);
+           (self as unknown as { fonts: FontFaceSet }).fonts.add(fontFace);
         }
-      } catch (e) {
-        console.warn(`Worker failed to load font ${font}`, e);
+      } catch (fontErr) {
+        console.warn(`Worker failed to load font ${font}:`, fontErr);
       }
     }
     // -----------------------------------------------------------------
@@ -55,7 +56,8 @@ self.onmessage = async (e: MessageEvent<GeneratePayload>) => {
     // Process only first 5 for preview, or all for zip
     const rowsToProcess = isPreview ? data.slice(0, 5) : data;
 
-    for (const row of rowsToProcess) {
+    for (let i = 0; i < rowsToProcess.length; i++) {
+      const row = rowsToProcess[i];
       // Draw background
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
@@ -64,9 +66,12 @@ self.onmessage = async (e: MessageEvent<GeneratePayload>) => {
       for (const field of fields) {
         ctx.save();
         
-        let text = row[field.mappedColumn] || '';
-        if (!field.mappedColumn) {
-           text = `[Static_${field.id}]`; 
+        let text = '';
+        if (field.mappedColumn) {
+          const val = (row && typeof row === 'object' && Object.prototype.hasOwnProperty.call(row, field.mappedColumn)) ? row[field.mappedColumn] : '';
+          text = typeof val === 'string' ? val : (val != null ? String(val) : '');
+        } else {
+          text = field.staticText || 'Certificate';
         }
         
         const effX = field.autoCenterHorizontal ? (templateDimensions.width / 2 - field.width / 2) : field.x;
@@ -97,7 +102,7 @@ self.onmessage = async (e: MessageEvent<GeneratePayload>) => {
         ctx.textBaseline = field.verticalAlign === 'top' ? 'top' : (field.verticalAlign === 'middle' ? 'middle' : 'bottom');
         
         let drawX = x;
-        let diffW = w - ctx.measureText(text).width;
+        const diffW = w - ctx.measureText(text).width;
         if (field.align === 'center') {
            drawX = x + diffW / 2;
         } else if (field.align === 'right') {
@@ -122,7 +127,15 @@ self.onmessage = async (e: MessageEvent<GeneratePayload>) => {
         previewBlobs.push(blob);
       } else {
         const arrayBuffer = await blob.arrayBuffer();
-        const fileName = `${data.indexOf(row) + 1}_${Object.values(row)[0] || 'cert'}.jpg`.replace(/[^a-z0-9_.-]/gi, '_');
+        const rowValues = Object.values(row);
+        const primaryIdentifier = rowValues.length > 0 && rowValues[0] ? String(rowValues[0]) : 'cert';
+        const sanitizedName = primaryIdentifier.replace(/[^a-z0-9_.-]/gi, '_');
+        let fileName = `${i + 1}_${sanitizedName}.jpg`;
+        let suffix = 1;
+        while (zipFiles[fileName]) {
+          fileName = `${i + 1}_${sanitizedName}_${suffix}.jpg`;
+          suffix++;
+        }
         zipFiles[fileName] = new Uint8Array(arrayBuffer);
       }
 
@@ -138,11 +151,16 @@ self.onmessage = async (e: MessageEvent<GeneratePayload>) => {
     } else {
       self.postMessage({ type: 'PROGRESS_ZIP', payload: { status: 'Zipping files...' } });
       const zippedData = zipSync(zipFiles, { level: 6 });
-      const zipBlob = new Blob([zippedData.buffer as ArrayBuffer], { type: 'application/zip' });
+      const zipBlob = new Blob([zippedData as BlobPart], { type: 'application/zip' });
       self.postMessage({ type: 'COMPLETE', payload: { blob: zipBlob } });
     }
     
-  } catch (error: any) {
-    self.postMessage({ type: 'ERROR', payload: { error: error.message } });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    self.postMessage({ type: 'ERROR', payload: { error: message } });
+  } finally {
+    if (bitmap) {
+      bitmap.close();
+    }
   }
 };

@@ -47,7 +47,7 @@ export default function GuidesPage() {
                   The <span className="bg-yellow-300 font-bold px-1 border border-black">FIRST ROW</span> of your CSV file MUST contain column headers. These exact headers will be used to map the text! 
                </p>
                <div className="bg-gray-100 p-4 border-2 border-primary-black font-mono text-sm shadow-[4px_4px_0_#0d0d0d]">
-                  <p className="text-gray-500 mb-2">// Example format (data.csv)</p>
+                  <p className="text-gray-500 mb-2">{"// Example format (data.csv)"}</p>
                   <p className="font-bold text-primary-green bg-black px-2 pb-1 inline-block">FullName, CertificateID, DateOfIssue</p>
                   <p>John Doe, CERT-101, 10/12/2026</p>
                   <p>Jane Smith, CERT-102, 10/12/2026</p>

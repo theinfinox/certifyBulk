@@ -14,12 +14,25 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ isOpen, onClose, blo
   const [urls, setUrls] = useState<string[]>([]);
 
   useEffect(() => {
-    if (isOpen && blobs.length > 0) {
-      const objectUrls = blobs.map(b => URL.createObjectURL(b));
+    if (!isOpen || blobs.length === 0) {
+      const resetTimer = setTimeout(() => {
+        setUrls([]);
+        setCurrentIndex(0);
+      }, 0);
+      return () => clearTimeout(resetTimer);
+    }
+
+    const objectUrls = blobs.map(b => URL.createObjectURL(b));
+
+    const updateTimer = setTimeout(() => {
       setUrls(objectUrls);
       setCurrentIndex(0);
-      return () => objectUrls.forEach(u => URL.revokeObjectURL(u));
-    }
+    }, 0);
+
+    return () => {
+      clearTimeout(updateTimer);
+      objectUrls.forEach(u => URL.revokeObjectURL(u));
+    };
   }, [isOpen, blobs]);
 
   if (!isOpen) return null;

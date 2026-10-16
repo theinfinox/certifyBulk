@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import { SplashScreen } from "../components/SplashScreen";
 import "./globals.css";
 
@@ -78,11 +77,6 @@ export default function RootLayout({
                <script>
                   (function() {
                     var container = document.getElementById('global-loader-container');
-                    if (window.location && window.location.pathname && window.location.pathname !== '/') {
-                      if (container) container.style.display = 'none';
-                      return;
-                    }
-
                     var bar = document.getElementById('global-loader-bar');
                     var pct = document.getElementById('global-loader-percent');
                     var txt = document.getElementById('global-loader-text');
@@ -137,13 +131,6 @@ export default function RootLayout({
         />
         <SplashScreen />
         {children}
-        {process.env.NEXT_PUBLIC_CLOUDFLARE_TOKEN && (
-           <Script 
-             src="https://static.cloudflareinsights.com/beacon.min.js" 
-             data-cf-beacon={`{"token": "${process.env.NEXT_PUBLIC_CLOUDFLARE_TOKEN}"}`}
-             strategy="afterInteractive" 
-           />
-        )}
       </body>
     </html>
   );

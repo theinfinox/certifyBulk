@@ -28,7 +28,7 @@ const OTHER_FONTS = [
 
 const GOOGLE_FONTS = Array.from(new Set([...PRIORITY_FONTS, ...OTHER_FONTS]));
 
-let loadedFonts = new Set<string>();
+const loadedFonts = new Set<string>();
 
 const loadFontCSS = (families: string[]) => {
   const toLoad = families.filter(f => !loadedFonts.has(f) && f.trim() !== '');
@@ -38,7 +38,7 @@ const loadFontCSS = (families: string[]) => {
   // Combine to max 10 to avoid URI too long
   for (let i = 0; i < toLoad.length; i += 10) {
     const chunk = toLoad.slice(i, i + 10);
-    const familyQuery = chunk.map(f => `family=${f.replace(/ /g, '+')}`).join('&');
+    const familyQuery = chunk.map(f => `family=${encodeURIComponent(f.replace(/ /g, '+'))}`).join('&');
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = `https://fonts.googleapis.com/css2?${familyQuery}&display=swap`;
@@ -71,10 +71,11 @@ export const FontPicker: React.FC<FontPickerProps> = ({ value, onChange }) => {
       // Lazy load only the filtered list visible to user so they can preview it
       loadFontCSS(filtered.slice(0, 20));
       if (isCustomFont) {
-         loadFontCSS([search.trim()]);
+         const sanitized = search.trim().replace(/[^a-zA-Z0-9 -]/g, '');
+         if (sanitized) loadFontCSS([sanitized]);
       }
     }
-  }, [open, search]);
+  }, [open, search, filtered, isCustomFont]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -134,7 +135,7 @@ export const FontPicker: React.FC<FontPickerProps> = ({ value, onChange }) => {
                   setSearch('');
                 }}
               >
-                Use custom: "{search.trim()}"
+                Use custom: &quot;{search.trim()}&quot;
               </li>
             )}
 

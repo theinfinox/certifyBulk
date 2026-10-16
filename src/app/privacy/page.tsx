@@ -40,7 +40,7 @@ export default function PrivacyPage() {
             </div>
             <div className="text-base md:text-lg leading-relaxed space-y-3">
                <p>
-                  When you upload a certificate template image (PNG/JPG) or a spreadsheet (CSV) containing names and IDs, all processing is performed strictly inside your browser's local memory and through background Web Workers (using an isolated <code>OffscreenCanvas</code>).
+                  When you upload a certificate template image (PNG/JPG) or a spreadsheet (CSV) containing names and IDs, all processing is performed strictly inside your browser&apos;s local memory and through background Web Workers (using an isolated <code>OffscreenCanvas</code>).
                </p>
                <p>
                   No data is transmitted, uploaded, streamed, or synchronized to any external server or backend database.
@@ -97,7 +97,7 @@ export default function PrivacyPage() {
                      <strong>Google Fonts</strong>: Used to fetch typography styles on demand when selecting custom fonts in the editor.
                   </li>
                   <li>
-                     <strong>Cloudflare Web Analytics</strong>: A privacy-first, cookie-less web analytics beacon that records aggregate page visits without tracking individual user identities or collecting personal data.
+                     <strong>Zero External Analytics</strong>: No web analytics, cookies, tracking beacons, or telemetry services are active. The application operates entirely client-side.
                   </li>
                </ul>
             </div>
@@ -108,7 +108,7 @@ export default function PrivacyPage() {
             <h3 className="text-xl md:text-2xl font-black uppercase mb-3">5. Contact & Inquiries</h3>
             <div className="text-base md:text-lg leading-relaxed">
                <p>
-                  If you have questions or feedback regarding this privacy policy or the application, please reach out via GitHub or through the developer's website:
+                  If you have questions or feedback regarding this privacy policy or the application, please reach out via GitHub or through the developer&apos;s website:
                </p>
                <div className="mt-4 flex flex-wrap gap-4 font-mono text-sm font-bold">
                   <a 
