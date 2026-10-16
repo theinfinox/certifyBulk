@@ -27,7 +27,7 @@ export default function GuidesPage() {
                <div className="w-full aspect-video border-4 border-primary-black shadow-[6px_6px_0_#0d0d0d] bg-primary-black relative mt-6">
                  <iframe 
                    className="absolute top-0 left-0 w-full h-full"
-                   src="https://www.youtube.com/embed/U1GBDmYsXI4" 
+                   src="https://www.youtube-nocookie.com/embed/U1GBDmYsXI4" 
                    title="CertifyBulk Demo Tutorial" 
                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                    allowFullScreen
