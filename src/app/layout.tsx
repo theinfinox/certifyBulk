@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
+import { SplashScreen } from "../components/SplashScreen";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -76,6 +77,12 @@ export default function RootLayout({
                </div>
                <script>
                   (function() {
+                    var container = document.getElementById('global-loader-container');
+                    if (window.location && window.location.pathname && window.location.pathname !== '/') {
+                      if (container) container.style.display = 'none';
+                      return;
+                    }
+
                     var bar = document.getElementById('global-loader-bar');
                     var pct = document.getElementById('global-loader-percent');
                     var txt = document.getElementById('global-loader-text');
@@ -83,6 +90,7 @@ export default function RootLayout({
                     var loader = document.getElementById('global-loader');
                     var progress = 0;
                     var dotCount = 0;
+                    var finished = false;
                     
                     var dotInterval = setInterval(function() {
                        dotCount = (dotCount + 1) % 4;
@@ -91,37 +99,43 @@ export default function RootLayout({
                        if(dots) dots.innerText = d;
                     }, 400);
 
+                    function dismiss() {
+                       if (finished) return;
+                       finished = true;
+                       clearInterval(interval);
+                       clearInterval(dotInterval);
+                       if (bar) bar.style.width = '100%';
+                       if (pct) pct.innerText = '100%';
+                       if (txt) txt.innerHTML = 'READY<span id="loader-dots"></span>';
+                       setTimeout(function() {
+                         if (loader) loader.style.transform = 'translateY(-100%)';
+                         setTimeout(function() {
+                            if (container) container.style.display = 'none';
+                         }, 600);
+                       }, 300);
+                    }
+
                     var interval = setInterval(function() {
                        if (progress < 90) {
                           progress += Math.random() * 5 + 1;
                        }
                        if (progress > 90) progress = 90;
                        
-                       bar.style.width = Math.floor(progress) + '%';
-                       pct.innerText = Math.floor(progress) + '%';
+                       if (bar) bar.style.width = Math.floor(progress) + '%';
+                       if (pct) pct.innerText = Math.floor(progress) + '%';
                        
                        if (window.__certify_hydrated) {
-                          progress = 100;
-                          bar.style.width = '100%';
-                          pct.innerText = '100%';
-                          txt.innerHTML = 'READY<span id="loader-dots"></span>';
-                          clearInterval(interval);
-                          clearInterval(dotInterval);
-                          
-                          setTimeout(function() {
-                            loader.style.transform = 'translateY(-100%)';
-                            setTimeout(function() {
-                               var container = document.getElementById('global-loader-container');
-                               if(container) container.style.display = 'none';
-                            }, 600);
-                          }, 400);
+                          dismiss();
                        }
                     }, 50);
+
+                    setTimeout(dismiss, 2500);
                   })();
                </script>
              `
           }}
         />
+        <SplashScreen />
         {children}
         {process.env.NEXT_PUBLIC_CLOUDFLARE_TOKEN && (
            <Script 
