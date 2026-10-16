@@ -9,6 +9,7 @@
 ![TypeScript](https://img.shields.io/badge/language-typescript-3178c6?style=flat-square)
 ![Next.js 16](https://img.shields.io/badge/framework-next.js_16-000000?style=flat-square)
 ![PWA Ready](https://img.shields.io/badge/pwa-ready-00c853?style=flat-square)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=flat-square&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/theinfinox)
 
 ---
 
@@ -150,6 +151,14 @@ Built with bold, geometric aesthetics:
 **Requirements**: Web Workers, OffscreenCanvas, Blob API, File API
 
 
+
+---
+
+## Support the Developer
+
+CertifyBulk is 100% free, client-side, and privacy-respecting with zero ads or tracking. If this tool saves you time or empowers your work, you can support its development:
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/theinfinox)
 
 ---
 

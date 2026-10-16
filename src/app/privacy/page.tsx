@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Heart, ShieldCheck, Lock, EyeOff, Cpu, RefreshCw, UserCheck } from 'lucide-react';
+import { Heart, ShieldCheck, Lock, EyeOff, Cpu, RefreshCw, UserCheck, Coffee } from 'lucide-react';
 
 export default function PrivacyPage() {
   return (
@@ -166,6 +166,15 @@ export default function PrivacyPage() {
       <footer className="w-full pb-8 text-center font-mono font-bold flex flex-wrap items-center justify-center gap-2 text-sm bg-bg-color z-10 relative">
          MADE WITH <Heart size={16} fill="currentColor" className="text-alert-red animate-pulse" /> BY 
          <a href="https://govindsr.me" target="_blank" rel="noopener noreferrer" className="bg-primary-black text-white px-2 py-1 mx-1 hover:-translate-y-1 shadow-[2px_2px_0px_#00C853] hover:shadow-[4px_4px_0px_#00C853] transition-all border-2 border-primary-black cursor-pointer">@theinfinox</a>
+         <span className="text-gray-500">|</span>
+         <a 
+           href="https://buymeacoffee.com/theinfinox" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           className="bg-yellow-400 text-primary-black px-2 py-0.5 hover:-translate-y-0.5 shadow-[2px_2px_0px_#0d0d0d] hover:shadow-[3px_3px_0px_#0d0d0d] transition-all border-2 border-primary-black flex items-center gap-1.5 cursor-pointer text-xs uppercase"
+         >
+           <Coffee size={13} /> Buy Me a Coffee
+         </a>
       </footer>
     </div>
   );
